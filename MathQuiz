@@ -1,0 +1,67 @@
+from tkinter import *
+
+from random import *
+
+def next_problem():
+    """ Generates a problem, stores the correct answer and clears the
+        feedback label and the answer entry. 
+    """
+    global x
+    global y
+
+    x = randrange(10)
+    y = randrange(10)
+
+    problem_text = str(x) + "  +  " + str(y) + "  = "
+    problem_label.configure(text = problem_text)
+    answer_entry.focus()
+
+
+def check_answer():
+    """ Provides feedback about the user's answer. Catches a ValueError
+        if they type in something very silly
+    """
+    answer = x + y  
+
+    try:
+        
+        user_answer = int(answer_entry.get())       
+        
+        if user_answer == answer:
+            
+            feedback.configure(text = "Correct!")   
+
+        else:
+            feedback.configure(text = "Wrong!")
+        
+    except ValueError:
+        feedback.configure(text = "That is not a number")    
+        answer_entry.delete(0, END) # Clears the answer field
+        answer_entry.focus()# Places focus on the answer field
+                                #  ready for their next try
+            
+#main routine
+
+root = Tk()
+root.title("TimesTable")
+
+#create widgets for interface
+problem_label = Label(root, text = "",width = 18, height = 3) #empty for now
+problem_label.grid(row = 0, column=0, sticky = W)
+
+answer_entry = Entry(root, width = 7)
+answer_entry.grid(row = 0, column = 1, sticky = W)
+
+check_btn = Button(root, text = "Check Answer", command = check_answer, relief = RIDGE)
+check_btn.grid(row = 1, column = 0)
+
+next_btn = Button(root, text = "Next", width = 5, command = next_problem, relief = RIDGE)
+next_btn.grid(row = 1, column = 1)
+
+feedback = Label(root, text = "", height = 3,)
+feedback.grid(row = 2, column = 0)
+
+
+next_problem() # Presents the first problem
+root.geometry("200x150+850+0")
+root.mainloop()
